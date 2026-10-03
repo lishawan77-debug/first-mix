@@ -19,10 +19,10 @@ test("renders FIRST MIX product shell", async () => {
   assert.doesNotMatch(html, /codex-preview|Starter Project/);
 });
 
-test("contains the three v1 games and beginner controls", async () => {
+test("contains the beginner games and controls", async () => {
   const page = await readFile(new URL("app/page.tsx", root), "utf8");
   for (const skill of ["Play & Pause","Find the Beat","Your First Transition"]) assert.match(page, new RegExp(skill));
-  for (const control of ["PLAY","PAUSE","REPLAY FROM START","TAP","CUE TRACK B"]) assert.match(page, new RegExp(control));
+  for (const control of ["PLAY","PAUSE","REPLAY FROM START","TAP","CUE TRACK B","Make a Simple Song","Not .* yet"]) assert.match(page, new RegExp(control));
   assert.match(page, /localStorage\.setItem/);
   assert.match(page, /AudioContext/);
   assert.match(page, /serviceWorker/);
