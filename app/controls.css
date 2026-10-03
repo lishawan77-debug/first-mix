@@ -1,0 +1,8 @@
+.trainer { width: min(100%, 300px); margin: 28px auto; min-height: 210px; justify-content: center; }
+.trainer strong { font-size: 70px; line-height: 1.1; }
+.transport { display: block; width: min(100%, 360px); min-height: 76px; margin: 0 auto 16px; font-size: 22px; }
+.status .sound { cursor: pointer; }
+@media (max-width: 700px) {
+  .status { gap: 6px; }
+  .sound { padding: 10px 8px; font-size: 9px; }
+}
