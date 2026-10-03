@@ -1,45 +1,45 @@
 # FIRST MIX
 
-FIRST MIX is a mobile-first Web/PWA DJ learning game for English-speaking complete beginners. It uses large text, large controls, short instructions, no timer, unlimited retries, and encouraging feedback.
+A relaxed, English-language DJ practice game for complete beginners, designed around readable controls and short sessions. The five skills are **Find the Beat**, **Find the One**, **Faster or Slower**, **Match the Speed**, and **Your First Mix**.
 
-The interface is an original generic two-deck learning console. It does not copy Denon, Pioneer, AlphaTheta, or other branded DJ hardware or software.
+The game uses generated Web Audio sounds, two independent decks, real gain and low-shelf filter controls, and action-gated completion. It does not require an account, purchased music, a DJ controller, or an API key. The original hosting scaffold is retained; no dependency versions were changed in this repair.
 
-## Playable lessons
+## Run
 
-1. **Play & Pause** 鈥?start and pause Deck A three times, with replay always available.
-2. **Find the Beat** 鈥?listen to a generated rhythm and tap along.
-3. **Your First Transition** 鈥?follow one action at a time to cue Deck B, bring it in, swap the bass, and fade Deck A out.
+Use Node >=22.13 and the repository's pnpm toolchain:
 
-All audio is generated in the browser with the Web Audio API. No copyrighted music, paid APIs, accounts, or API keys are required.
-
-![FIRST MIX home screen](public/screenshot.png)
-
-## Run locally
-
-Requirements: Node.js 22.13 or later and pnpm.
-
-```bash
-pnpm install
+```sh
+pnpm install --frozen-lockfile
 pnpm dev
-```
-
-Open the local URL printed by the development server. Audio starts only after a user gesture to comply with mobile browser autoplay rules.
-
-## Build and verify
-
-```bash
+pnpm typecheck
+pnpm lint
+pnpm test:game
 pnpm build
-node --test tests/rendered-html.test.mjs
+pnpm test
 ```
 
-## Verification results
+`test:game` typechecks/emits the framework-independent game island and runs behavioural rule and service-worker policy tests. `test` additionally builds the existing Vinext application and runs a production-entry SSR smoke test. A string-presence check is not a substitute for gameplay testing.
 
-- Production build: passed
-- Automated product checks: passed
-- Server-rendered FIRST MIX shell: passed
-- Web Audio, LocalStorage, service worker, readable text, large controls, and responsive breakpoint checks: passed
-- Manual checks still recommended: iPhone/iPad Safari speaker comfort, speech voice availability, and usability sessions with learners aged approximately 48+
+## Browser regression
 
-## PWA and progress
+```sh
+pnpm preview:game
+# In another terminal, with Python Playwright and Chromium available:
+python tests/browser_smoke.py
+```
 
-The app includes a web manifest, service worker foundation, responsive layouts, reduced-motion support, local progress saving, XP, and a daily review shortcut.
+`CHROMIUM` selects an installed Chromium executable (default `/usr/bin/chromium`). The browser script can also validate owned inline game content with `FIRST_MIX_INLINE=1` when a sandbox blocks local URL navigation. This mode uses an in-memory storage adapter and **does not validate production routing, React/Vinext hydration, real origin storage, or service-worker installation**. It never removes browser policies. Screenshots/results go to `outputs/game-validation` or `FIRST_MIX_TEST_OUTPUT`.
+
+## Learning behaviour
+
+Only real completed activities write completion. NEXT opens a fresh introduction. Repeat taps on the same beat/bar cannot inflate results. Tempo answers unlock only after the current pair has played. Speed changes affect the running B deck without restarting the context. The final mix exposes one relevant control at a time, and requires each action before progressing.
+
+Learning assist explicitly queues B on the next ONE after a valid tap. It is not an unassisted DJ performance assessment. The cue control marks a starting point; the game does not claim a separate headphone-monitor output. Bass controls apply a real low-shelf reduction, not an instrument-isolation promise.
+
+Progress uses validated `first-mix-progress-v2` saves. Earlier v1 data is retained untouched but not granted new completion credits because the earlier version could skip lessons. Replay does not award duplicate XP. Calendar-day streaks reflect completed practice, not an invented counter. Failed storage produces a visible notice.
+
+The service worker provides warm-cache support for the root page and same-origin static assets. It excludes API/auth/foreign requests and private/no-store responses. Fresh-install offline use is not promised; production offline operation must still be tested after deployment.
+
+## Verification status
+
+See `docs/REPAIR-2026-10-03.md`. Local game checks passed; the full pinned-dependency production build, lint, real iPhone/iPad audio/touch, and production PWA installation remain unverified. No deployment or main-branch merge is part of this repair.

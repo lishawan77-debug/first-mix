@@ -9,8 +9,11 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "pnpm run build && node --test tests/rendered-html.test.mjs",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "test": "pnpm run test:game && pnpm run build && node --test tests/rendered-html.test.mjs",
+    "test:game": "tsc -p tsconfig.game.json && node --test tests/core.test.mjs tests/sw.test.mjs",
+    "preview:game": "tsc -p tsconfig.game.json && node tests/serve-game.mjs",
+    "typecheck": "tsc --noEmit --incremental false",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern .game-test",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
